@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  php-apache-environment:
+    container_name: my_php_apache
+    build: 
+      context: ./main
+      dockerfile: Dockerfile
+    # กำหนด dependency ไว้ที่คอนเทนเนอร์ db
+    depends_on:
+      - db   
+    # แชร์โฟลเดอร์ src ของ PHP กับโฟลเดอร์ /var/www/html/ ภายในคอนเทนเนอร์
+    volumes:
+      - ./main/src:/var/www/html/
+      # apache 
+      #- ./php/apache2.conf:/etc/apache2/apache2.conf    
+    ports:
+      - 8080:80
+  # กำหนดคอนเทนเนอร์สำหรับ MySQL
+  db:
+    container_name: my_db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: MYSQL_DATABASE
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+    command: >
+      --max-allowed-packet=512M
+      --innodb-buffer-pool-size=1G  
+    ports:
+      - "9907:3306"
+  # กำหนดคอนเทนเนอร์สำหรับ phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    # เปิดพอร์ต 8000 บนโฮสต์ไปยังพอร์ต 80 ของคอนเทนเนอร์ phpMyAdmin
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      PMA_HOST: db
+      UPLOAD_LIMIT: 512M
+    depends_on:
+      - db
