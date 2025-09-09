@@ -15,7 +15,7 @@ function sendVerificationEmail($email, $user_id, $verification_code) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'pannatat.b@gmail.com';  // ใส่อีเมลของคุณ
-        $mail->Password = 'pqok dgoq ylbq jcht';  // ใช้รหัสผ่านแอปจาก Google
+        $mail->Password = '.';  // ใช้รหัสผ่านแอปจาก Google
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
